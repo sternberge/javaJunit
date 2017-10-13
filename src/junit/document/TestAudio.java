@@ -17,6 +17,8 @@ public class TestAudio {
 	Audio mondoc;
 	Localisation loc;
 	Genre gen;
+	
+	//tests constructeur à finir
 	@Before
 	public void init() throws Exception {
 		loc = new Localisation("nom","localisation");

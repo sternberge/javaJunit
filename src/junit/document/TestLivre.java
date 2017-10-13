@@ -13,7 +13,7 @@ public class TestLivre {
 
 	Livre monLivre;
 	
-	
+	// tests constructeur à finir
 	@Test(expected = OperationImpossible.class)
 	public void testConstructor() throws Exception {
 		monLivre = new Livre("code",new Localisation("salle","rayon"),"titre","auteur","annee",new Genre("n"),-120);
@@ -28,13 +28,13 @@ public class TestLivre {
 	
 	@Test
 	public void testConstructor3() throws Exception {
-		assertFalse(monLivre !=null);
+		assertNotNull(monLivre);
 	}
 	
 	@Test
 	public void testConstructor4() throws Exception {
 		monLivre = new Livre("code",new Localisation("salle","rayon"),"titre","auteur","annee",new Genre("n"),120);
-		assertTrue(monLivre !=null);
+		assertNotNull(monLivre);
 	}
 
 }
