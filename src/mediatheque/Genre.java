@@ -33,7 +33,8 @@ public class Genre implements Serializable{
          * ce genre a ete emprunte
          */
         public void emprunter(){
-        	nbEmprunts = nbEmprunts+2;
+        	//nbEmprunts = nbEmprunts+2;
+        	nbEmprunts = nbEmprunts+1;
         }
 
         /**

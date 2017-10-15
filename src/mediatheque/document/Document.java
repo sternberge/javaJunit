@@ -195,7 +195,8 @@ public abstract class Document implements Empruntable, Serializable, HasInvarian
                 if (empruntable) {
                         throw new OperationImpossible("Document metEmpruntable empruntable" + this);
                 }
-                empruntable = false;
+                //empruntable = false;
+                empruntable = true;
                 if (!invariant()) {
                         throw new InvariantBroken("Document -" + this);
                 }
