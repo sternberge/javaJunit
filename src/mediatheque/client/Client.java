@@ -1,7 +1,11 @@
 package mediatheque.client;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Vector;
 import mediatheque.*;
 import util.Datutil;
@@ -513,4 +517,7 @@ public class Client implements Serializable {
         static int getStat() {
                 return nbEmpruntsTotal;
         }
+        
+        
+        
 }
