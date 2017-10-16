@@ -23,19 +23,13 @@ public class TestFicheEmprunt {
 	@Before
 	public void setUp() throws Exception {
 		monClient = new Client("Nom", "Prenom");
-		maMediatheque = new Mediatheque("mediatheque");
+		maMediatheque = new Mediatheque("NomMedia");
 		monDoc = (Document)new Audio("Code", new Localisation("salle", "rayon"), "Titre", "Auteur", "annee", new Genre("Nom"),
 				"Classification");
 		
 		maFiche = new FicheEmprunt(maMediatheque,monClient, monDoc);
-	}
-	
-	
-	@Test
-	public void testConstructeur() throws Exception{
-		// objet déja instancié dans le setUp, bonne pratique ??
-		//maFiche = new FicheEmprunt(maMediatheque,monClient, monDoc);
-		assertEquals(maFiche.getDepasse(),false);
+		
+		
 	}
 
 }

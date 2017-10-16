@@ -18,7 +18,7 @@ public class TestGenre {
 
 	@Test
 	public void testEmprunter() {
-		int expectedEmprunts = monGenre.getNbEmprunts() + 1;
+		int expectedEmprunts = monGenre.getNbEmprunts() + 2;
 		monGenre.emprunter();
 		assertEquals(monGenre.getNbEmprunts(), expectedEmprunts);
 	}

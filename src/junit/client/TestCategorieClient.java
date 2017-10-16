@@ -15,18 +15,6 @@ public class TestCategorieClient {
 	public void setUp() throws Exception {
 		maCategorie = new CategorieClient("nom");
 	}
-	
-	@Test
-	public void testConstructor() {
-		maCategorie = new CategorieClient("nom",12,456,45,45,true);
-		assertEquals(true,maCategorie.getCodeReducUtilise());
-	}
-	
-	@Test
-	public void testConstructor1() {
-		maCategorie = new CategorieClient("nom");
-		assertEquals(false,maCategorie.getCodeReducUtilise());
-	}
 
 	@Test
 	public void testModifierNom() {
