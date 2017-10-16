@@ -158,27 +158,14 @@ public class TestClient {
 		assertEquals(monClient.getNbEmpruntsEnRetard(),0);
 	}
 	
-	// Probleme à regler 
 	@Test
-	public void testDateRetour() throws Exception{
-		//SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		//Date d = sdf.parse("19/10/2017");
-		Calendar calendar = new GregorianCalendar(2017,10,15);
-		Date d =  calendar.getTime();
-		Calendar calendar2 = new GregorianCalendar(2017,10,17);
-		//Date dateExpected = sdf.parse("20/10/2017");
-		Date dateExpected = calendar2.getTime();
-		monClient.getCategorie().modifierCoefDuree(1);
-		int duree = 2;
-		Date retour = monClient.dateRetour(d, duree);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(retour);
-		int day = cal.get(Calendar.DAY_OF_MONTH);
-		int month = cal.get(Calendar.MONTH);
-		int year = cal.get(Calendar.YEAR);
-		System.out.println("jour :"+day+" mois : "+month+" annee : "+year);
-		assertEquals(0,retour.compareTo(dateExpected)); /// Probleme avec la date à regler
-	}
+  	public void testDateRetour() throws Exception{
+  		Date dateEmprunt = new GregorianCalendar(2017, Calendar.OCTOBER, 15).getTime();
+ 		Date dateExpected = new GregorianCalendar(2017, Calendar.OCTOBER, 20).getTime();
+ 		monClient.getCategorie().modifierCoefDuree(1.0);
+ 		Date retour = monClient.dateRetour(dateEmprunt, 5);
+ 		assertEquals(0,retour.compareTo(dateExpected));
+ 	}
 	
 	@Test
 	public void testSommeDue() {
