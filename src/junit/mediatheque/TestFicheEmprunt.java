@@ -31,5 +31,12 @@ public class TestFicheEmprunt {
 		
 		
 	}
+	
+	
+	@Test
+	 public void testConstructeur() throws Exception{
+	 		//maFiche = new FicheEmprunt(maMediatheque,monClient, monDoc);
+	 		assertEquals(maFiche.getDepasse(),false);
+	  	}
 
 }
