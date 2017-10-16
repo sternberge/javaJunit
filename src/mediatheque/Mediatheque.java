@@ -958,13 +958,16 @@ public final class Mediatheque implements Serializable {
         public boolean initFromFile() {
                 FileInputStream fin;
                 Mediatheque media = null;
+                
 
                 try {
                         fin = new FileInputStream(nom + ".data");
+                        
                 } catch (FileNotFoundException fe) {
                         System.out.println(fe);
                         return false;
                 }
+                
                 ObjectInputStream ois;
 
                 try {
@@ -1011,6 +1014,13 @@ public final class Mediatheque implements Serializable {
                         return false;
                 }
                 return true;
+        }
+        
+        
+        public static void main(String [] args) {
+        	
+        	Mediatheque mamedia = new Mediatheque("mediatheque");
+        	
         }
 }
 
