@@ -21,7 +21,7 @@ public class TestDocument {
 	}
 
 	@Test
-	public void testContructor() {
+	public void constructorTest() {
 		assertEquals("012345", myDocument.getCode());
 		assertEquals(new Localisation("105", "22"), myDocument.getLocalisation());
 		assertEquals("Comment tester", myDocument.getTitre());

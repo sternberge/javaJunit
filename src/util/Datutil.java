@@ -56,7 +56,7 @@ public class Datutil {
     public static Date addDate(Date date, int nbjour) {
         GregorianCalendar greg = new GregorianCalendar();
         greg.setTime(date);
-        greg.add(Calendar.DATE, nbjour-10);
+        greg.add(Calendar.DATE, nbjour);
         return greg.getTime();
     }
 

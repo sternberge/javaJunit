@@ -11,6 +11,7 @@ import java.lang.reflect.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import mediatheque.OperationImpossible;
 import mediatheque.client.CategorieClient;
@@ -116,17 +117,11 @@ public class TestClient {
 	
 	@Test
 	public void testDateRetour() throws Exception{
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Date d = sdf.parse("25/10/2017");
-		Date dateExpected = sdf.parse("20/10/2017");
-		monClient.getCategorie().modifierCoefDuree(0);
-		int duree = 1;
-		Date retour = monClient.dateRetour(d, duree);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(retour);
-		int day = cal.get(Calendar.DAY_OF_MONTH);
-		System.out.println(day);
-		assertEquals(0,retour.compareTo(dateExpected)); /// Probleme avec la date à regler
+		Date dateEmprunt = new GregorianCalendar(2017, Calendar.OCTOBER, 15).getTime();
+		Date dateExpected = new GregorianCalendar(2017, Calendar.OCTOBER, 20).getTime();
+		monClient.getCategorie().modifierCoefDuree(1.0);
+		Date retour = monClient.dateRetour(dateEmprunt, 5);
+		assertEquals(0,retour.compareTo(dateExpected));
 	}
 	
 	@Test
