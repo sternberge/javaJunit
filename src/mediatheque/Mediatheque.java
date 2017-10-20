@@ -232,7 +232,7 @@ public final class Mediatheque implements Serializable {
          * @throws OperationImpossible
          */
         public void modifierLocalisation(Localisation loc, String s, String r) throws OperationImpossible {
-                Localisation inVector = chercherLocalisation(loc.getRayon(), loc.getRayon());
+                Localisation inVector = chercherLocalisation(loc.getSalle(), loc.getRayon());
                 if (inVector == null) {
                         throw new OperationImpossible("Modifier Localisation inexistante");
                 }
