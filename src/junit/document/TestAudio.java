@@ -49,40 +49,31 @@ public class TestAudio {
 	}
 	
 	@Test
-	public void VerificationIncrementationNbEmpruntAudio() throws Exception{
+	public void VerificationIncrementationNbEmpruntDocument() throws Exception{
 		int avant = myAudio.getNbEmprunts();
 		myAudio.metEmpruntable();
 		myAudio.emprunter();
 		int apres = myAudio.getNbEmprunts();
 		assertEquals(avant + 1, apres);
 	}
-
 	
-	/*Audio mondoc;
-	Localisation loc;
-	Genre gen;
-	
-	//tests constructeur à finir
-	@Before
-	public void init() throws Exception {
-		loc = new Localisation("nom","localisation");
-		gen = new Genre("nom");
-		mondoc =  new Audio ("qjqskldjlq",loc,"3eme","titre","auteur",gen,"classification");
-	}
-	
-
-	
-	@Test (expected = OperationImpossible.class)
-	public void testConstructor() throws Exception{
-		mondoc =  new Audio ("qjqskldjlq",loc,"3eme","titre","auteur",gen,null);
+	@Test
+	public void VerificationIncrementationNbEmpruntAudio() throws Exception{
+		int avant = Audio.getStat();
+		myAudio.metEmpruntable();
+		myAudio.emprunter();
+		int apres = Audio.getStat();
+		assertEquals(avant + 1, apres);
 	}
 	
 	@Test
-	public void testConstructor2() throws Exception{
-		mondoc =  new Audio ("qjqskldjlq",loc,"3eme","auteur","auteur",gen,"");
-		assertEquals(mondoc.getAuteur(),"auteur");
-		assertEquals(mondoc.getLocalisation(),loc);
-	}*/
+	public void dureeEmpruntTest() {
+		assertEquals(28, myAudio.dureeEmprunt());
+	}
 	
+	@Test
+	public void tarifEmpruntTest() {
+		assertEquals(1.0, myAudio.tarifEmprunt(), 0.0);
+	}
 
 }

@@ -33,10 +33,40 @@ public class TestDocument {
 		assertEquals(0, myDocument.getNbEmprunts());
 	}
 	
-
 	@Test(expected=OperationImpossible.class)
 	public void ConstructorExceptionTest() throws Exception {
-		impossibleDocument = new DocumentForTest(null, null, null, null, null, null);
+		impossibleDocument = new DocumentForTest(null, new Localisation("105", "22"),
+				"Comment tester", "Sternberger.A", "2017", new Genre("Education"));
+	}
+	
+	@Test(expected=OperationImpossible.class)
+	public void ConstructorExceptionTest2() throws Exception {
+		impossibleDocument = new DocumentForTest("012345", null,
+				"Comment tester", "Sternberger.A", "2017", new Genre("Education"));
+	}
+	
+	@Test(expected=OperationImpossible.class)
+	public void ConstructorExceptionTest3() throws Exception {
+		impossibleDocument = new DocumentForTest("012345", new Localisation("105", "22"),
+				null, "Sternberger.A", "2017", new Genre("Education"));
+	}
+	
+	@Test(expected=OperationImpossible.class)
+	public void ConstructorExceptionTest4() throws Exception {
+		impossibleDocument = new DocumentForTest("012345", new Localisation("105", "22"),
+				"Comment tester", null, "2017", new Genre("Education"));
+	}
+	
+	@Test(expected=OperationImpossible.class)
+	public void ConstructorExceptionTest5() throws Exception {
+		impossibleDocument = new DocumentForTest("012345", new Localisation("105", "22"),
+				"Comment tester", "Sternberger.A", null, new Genre("Education"));
+	}
+	
+	@Test(expected=OperationImpossible.class)
+	public void ConstructorExceptionTest6() throws Exception {
+		impossibleDocument = new DocumentForTest("012345", new Localisation("105", "22"),
+				"Comment tester", "Sternberger.A", "2017", null);
 	}
 	
 	@Test
@@ -68,9 +98,14 @@ public class TestDocument {
 		assertEquals(avant + 1, apres);
 	}
 	
+	@Test(expected=OperationImpossible.class)
+	public void metEmpruntableTest() throws Exception{
+		myDocument.metEmpruntable();
+		myDocument.metEmpruntable();
+	}
 	
 	@Test
-	public void metEmpruntableTest() throws Exception{
+	public void metEmpruntableTest2() throws Exception{
 		myDocument.metEmpruntable();
 		assertEquals(true, myDocument.estEmpruntable());
 	}
@@ -89,6 +124,15 @@ public class TestDocument {
 		myDocument.metConsultable();
 	}
 	
+	@Test
+	public void metConsultableTest3() throws Exception {
+		myDocument.metEmpruntable();
+		myDocument.metConsultable();
+		assertFalse(myDocument.estEmpruntable());
+	}
+	
+	
+	
 	//Peut pas restituer un document non empruntable
 	@Test(expected=OperationImpossible.class)
 	public void restituerTest() throws Exception {
@@ -100,6 +144,14 @@ public class TestDocument {
 	public void restituerTest2() throws Exception {
 		myDocument.metEmpruntable();
 		myDocument.restituer();
+	}
+	
+	@Test
+	public void restituerTest3() throws Exception {
+		myDocument.metEmpruntable();
+		myDocument.emprunter();
+		myDocument.restituer();
+		assertFalse(myDocument.estEmprunte());
 	}
 	
 	//Pas empruntable, pas emprunte => Safe state

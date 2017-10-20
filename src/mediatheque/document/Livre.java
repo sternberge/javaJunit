@@ -75,6 +75,7 @@ public final class Livre extends Document {
         @Override
         public boolean emprunter() throws InvariantBroken, OperationImpossible {
                 super.emprunter();
+                nbEmpruntsTotal++;
                 return true;
         }
         // Methodes de l'interface Empruntable
