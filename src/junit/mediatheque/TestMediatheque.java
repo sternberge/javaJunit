@@ -3,6 +3,7 @@ package junit.mediatheque;
 import static org.junit.Assert.*;
 import mediatheque.*;
 import mediatheque.client.CategorieClient;
+import mediatheque.client.Client;
 import mediatheque.document.Audio;
 
 import org.junit.Before;
@@ -17,15 +18,11 @@ public class TestMediatheque {
 	@Before
 	public void setUp() throws Exception {
 		maMediatheque = new Mediatheque("Mediatheque");
-		maMediatheque.ajouterCatClient("Etudiant", 0, 0, 1, 1, true);
+		maMediatheque.ajouterCatClient("Etudiant", 0, 0, 0, 0, true);
 		maMediatheque.ajouterLocalisation("38", "4");
 		maLocalisation = new Localisation ("38","4");
 	}
 
-	@Test
-	public void test() {
-		
-	}
 	
 	@Test
 	public void testChercherGenre() {
@@ -139,12 +136,41 @@ public class TestMediatheque {
 	}
 	
 	
-	@Test
+	@Test (expected = OperationImpossible.class)
 	public void testsupprimerCatClient3 () throws Exception {
-		
+		Client monClient = new Client("nom", "prenom", "adresse", new CategorieClient("Etudiant"));
+		maMediatheque.inscrire("nom", "prenom", "adresse", "Etudiant");
 		maMediatheque.supprimerCatClient("Etudiant");
 	}
 	
+	
+	@Test(expected = OperationImpossible.class)
+	public void testajouterCatClient() throws Exception {
+		maMediatheque.ajouterCatClient("Etudiant", 0, 0, 0, 0, true);
+	}
+	
+	@Test
+	public void testajouterCatClient2() throws Exception {
+		CategorieClient c = maMediatheque.ajouterCatClient("Prof", 0, 0, 0, 0, true);
+		assertEquals(c.getNom(),"Prof");
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testModifierCatClient() throws Exception {
+		maMediatheque.modifierCatClient(new CategorieClient("Adolescent"), "nom", 0, 0, 0, 0, true);
+	}
+	
+	@Test
+	public void testModifierCatClient2() throws Exception {
+		CategorieClient c = maMediatheque.modifierCatClient(new CategorieClient("Etudiant"), "EtudiantMaster", 0, 0, 0, 0, true);
+		assertEquals(c.getNom(),"EtudiantMaster");
+	
+	}
+	
+	@Test
+	public void testGetCategorieAt() throws Exception {
+		
+	}
 	
 
 }
