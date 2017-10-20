@@ -33,10 +33,13 @@ public class TestFicheEmprunt {
 	}
 	
 	
+	// Erreur fileNotFoundException
+	
 	@Test
 	 public void testConstructeur() throws Exception{
 	 		//maFiche = new FicheEmprunt(maMediatheque,monClient, monDoc);
 	 		assertEquals(maFiche.getDepasse(),false);
+	 		assertEquals(maFiche.getDocument(),monDoc);
 	  	}
 
 }

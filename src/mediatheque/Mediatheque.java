@@ -962,6 +962,7 @@ public final class Mediatheque implements Serializable {
                 try {
                         fin = new FileInputStream(nom + ".data");
                 } catch (FileNotFoundException fe) {
+                	System.out.println("bug ici");
                         System.out.println(fe);
                         return false;
                 }

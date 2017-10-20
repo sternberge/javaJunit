@@ -47,7 +47,25 @@ public class TestClient {
 		assertEquals(maCategorie,monClient.getCategorie());
 	}
 	
-	@Test//(expected = OperationImpossible.class)
+	@Test (expected = OperationImpossible.class)
+	public void testConstructeur2() throws Exception {
+		Client clientConstructeur2 = new Client("Nom", "Prenom","Adresse",maCategorie, 10);
+		
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testConstructeur2bis() throws Exception {
+		maCategorie.modifierCodeReducActif(false);
+		Client clientConstructeur2 = new Client("Nom", "Prenom","Adresse",maCategorie, 10);
+		
+		assertEquals("Nom",clientConstructeur2.getNom());
+		assertEquals("Prenom",clientConstructeur2.getPrenom());
+		assertEquals("Adresse",clientConstructeur2.getAdresse());
+		assertEquals(maCategorie,clientConstructeur2.getCategorie());
+		
+	}
+	
+	@Test
 	public void testInitAttr() throws Exception {
 		Class[] cArg = new Class[4];
         cArg[0] = String.class;
@@ -158,6 +176,9 @@ public class TestClient {
 		assertEquals(monClient.getNbEmpruntsEnRetard(),0);
 	}
 	
+	
+	// la methode mettreajourlesEmprunts à tester !!
+	
 	@Test
   	public void testDateRetour() throws Exception{
   		Date dateEmprunt = new GregorianCalendar(2017, Calendar.OCTOBER, 15).getTime();
@@ -174,7 +195,7 @@ public class TestClient {
 	}
 	
 	
-	//setcategorie à faire
+	
 	@Test (expected = OperationImpossible.class)
 	public void testsetCategorie() throws Exception {
 		maCategorie.modifierCodeReducActif(true);
