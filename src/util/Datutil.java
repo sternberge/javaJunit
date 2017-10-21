@@ -31,7 +31,7 @@ public class Datutil {
      */
     public static Date dateDuJour() {
         return dateDeTest;
-        // return Calendar.getInstance().getTime();
+        //return Calendar.getInstance().getTime();
     }
 
     /**
