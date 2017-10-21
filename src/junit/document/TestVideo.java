@@ -55,5 +55,39 @@ public class TestVideo {
 				"1973", new Genre("Thriller"), -10, "Ne pas recopier");
 	}
 	
+	@Test
+	public void emprunterTest() throws Exception{
+		maVideo.metEmpruntable();
+		assertTrue(maVideo.emprunter());
+	}
+	
+	@Test
+	public void VerificationIncrementationNbEmpruntDocument() throws Exception{
+		int avant = maVideo.getNbEmprunts();
+		maVideo.metEmpruntable();
+		maVideo.emprunter();
+		int apres = maVideo.getNbEmprunts();
+		assertEquals(avant + 1, apres);
+	}
+	
+	@Test
+	public void VerificationIncrementationNbEmpruntVideo() throws Exception{
+		int avant = Video.getStat();
+		maVideo.metEmpruntable();
+		maVideo.emprunter();
+		int apres = Video.getStat();
+		assertEquals(avant + 1, apres);
+	}
+	
+	@Test
+	public void dureeEmpruntTest() {
+		assertEquals(14, maVideo.dureeEmprunt());
+	}
+	
+	@Test
+	public void tarifEmpruntTest() {
+		assertEquals(1.5, maVideo.tarifEmprunt(), 0.0);
+	}
+	
 
 }

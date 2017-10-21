@@ -45,7 +45,8 @@ public class Localisation implements Serializable{
      * 
      * @param s la salle.
      */
-    void setSalle(String s) {
+    //void setSalle(String s) {
+    public void setSalle(String s) {
         salle = s;
     }
     /**
@@ -61,7 +62,8 @@ public class Localisation implements Serializable{
      * 
      * @param r le rayon.
      */
-    void setRayon(String r) {
+    //void setRayon(String r) {
+    public void setRayon(String r) {
         rayon = r;
     }
     /**

@@ -55,7 +55,7 @@ public final class Video extends Document {
                         String auteur, String annee, Genre genre, int dureeFilm,
                         String mentionLegale) throws OperationImpossible, InvariantBroken{
                 super(code, localisation, titre, auteur, annee, genre);
-                if (dureeFilm < 0 || mentionLegale == null) {
+                if (dureeFilm <= 0 || mentionLegale == null) {
                         throw new OperationImpossible("Ctr Video dureeFile = " + dureeFilm
                                         + " mentionLegale = " + mentionLegale);
                 }
