@@ -1,6 +1,9 @@
 package junit.mediatheque;
 
 import static org.junit.Assert.*;
+
+import java.lang.reflect.Method;
+
 import mediatheque.*;
 import mediatheque.client.CategorieClient;
 import mediatheque.client.Client;
@@ -13,14 +16,22 @@ public class TestMediatheque {
 
 	Mediatheque maMediatheque;
 	Localisation maLocalisation;
+	Genre monGenre;
+	
 	
 	
 	@Before
 	public void setUp() throws Exception {
 		maMediatheque = new Mediatheque("Mediatheque");
 		maMediatheque.ajouterCatClient("Etudiant", 0, 0, 0, 0, true);
+		maMediatheque.ajouterCatClient("Retraite", 0, 0, 0, 0, true);
 		maMediatheque.ajouterLocalisation("38", "4");
 		maLocalisation = new Localisation ("38","4");
+		monGenre = new Genre("mongenre");
+		maMediatheque.ajouterGenre("mongenre");
+		Audio musique = new Audio("123",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
+		maMediatheque.ajouterDocument(musique);
+		maMediatheque.inscrire("Sternberger", "Aurelien", "adresse", "Etudiant");
 	}
 
 	
@@ -132,7 +143,10 @@ public class TestMediatheque {
 	
 	@Test
 	public void testsupprimerCatClient2 () throws Exception {
-		maMediatheque.supprimerCatClient("Etudiant");
+		CategorieClient c = maMediatheque.chercherCatClient("Retraite");
+		System.out.println("la categorie est : "+c);
+		
+		maMediatheque.supprimerCatClient("Retraite");
 	}
 	
 	
@@ -162,15 +176,235 @@ public class TestMediatheque {
 	
 	@Test
 	public void testModifierCatClient2() throws Exception {
-		CategorieClient c = maMediatheque.modifierCatClient(new CategorieClient("Etudiant"), "EtudiantMaster", 0, 0, 0, 0, true);
+		CategorieClient c = maMediatheque.modifierCatClient(new CategorieClient("Etudiant",0,0,0,0,true), "EtudiantMaster", 0, 0, 0, 0, true);
+		
 		assertEquals(c.getNom(),"EtudiantMaster");
 	
 	}
 	
 	@Test
 	public void testGetCategorieAt() throws Exception {
+		CategorieClient c = maMediatheque.getCategorieAt(5);
+		assertEquals(c,null);
 		
 	}
 	
+	@Test
+	public void testGetCategorieAt2() throws Exception {
+		maMediatheque.ajouterCatClient("Enfant", 0, 0, 0, 0, true);
+		CategorieClient c =maMediatheque.getCategorieAt(1);
+		assertEquals(c.getNom(),"Enfant");
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testAjouterDocument() throws Exception {
+		// Test d'ajout doc déja existant
+		Audio monAudio =  new Audio("MonDocument",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		maMediatheque.ajouterDocument(monAudio);
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testAjouterDocument3() throws Exception {
+		Audio monAudio =  new Audio("MonDocument",maLocalisation,"titre","auteur","annee",new Genre("GenreNonPresentDansMedia"),"classification");
+		maMediatheque.ajouterDocument(monAudio);
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testAjouterDocument4() throws Exception {
+		Audio monAudio =  new Audio("MonDocument",new Localisation("12", "12"),"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+	}
+	
+	
+	@Test
+	public void testAjouterDocument2() throws Exception {
+		
+		Audio monAudio =  new Audio("MonDocument",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		Audio monAudio2 = (Audio)maMediatheque.getDocumentAt(0);
+		assertEquals(monAudio2.getCode(),"MonDocument");
+		assertEquals(monAudio2.getTitre(),"titre");
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testRetirerDocument() throws Exception {
+		maMediatheque.retirerDocument("fakeCode");
+		
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testRetirerDocument2() throws Exception {
+		Audio monAudio =  new Audio("MonDocument",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		monAudio.metEmpruntable();
+		monAudio.emprunter();
+		maMediatheque.retirerDocument("MonDocument");
+	}
+	
+	@Test
+	public void testRetirerDocument3() throws Exception {
+		Audio monAudio =  new Audio("MonDocumentAudio",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		Audio monAudio2 = (Audio)maMediatheque.chercherDocument("MonDocumentAudio");
+		assertEquals(monAudio2.getCode(),"MonDocumentAudio");
+		maMediatheque.retirerDocument("MonDocumentAudio");
+		Audio monAudio3 = (Audio)maMediatheque.chercherDocument("MonDocumentAudio");
+		assertEquals(monAudio3,null);
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testmetEmpruntable() throws Exception {
+		maMediatheque.metEmpruntable("CodeInexistant");
+	}
+	
+	@Test 
+	public void testmetEmpruntable2() throws Exception {
+		Audio monAudio =  new Audio("MonDocumentAudio",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		monAudio.metEmpruntable();
+		assertTrue(monAudio.estEmpruntable());
+		assertTrue(monAudio.emprunter());
+		
+		
+	}
+	
+	
+	
+	@Test
+	public void testListerDocuments() throws Exception{
+		maMediatheque.listerDocuments();
+		
+	}
+	
+	
+	@Test
+	public void testListerDocuments2() throws Exception{
+		Audio monAudio =  new Audio("MonDocumentAudio",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		maMediatheque.listerDocuments();
+		
+	}
+	
+	@Test
+	public void testexisteDocument() throws Exception{
+		Audio monAudio =  new Audio("MonDocumentAudio",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		Class cArg[] = new Class[1];
+		cArg[0] = Genre.class;
+		Method method = maMediatheque.getClass().getDeclaredMethod("existeDocument", cArg);
+		method.setAccessible(true);
+		Object o = method.invoke(maMediatheque,new Object[] {new Genre("Faux Genre")});
+		assertEquals(o,false);
+		
+		
+	}
+	
+	@Test
+	public void testexisteDocument2() throws Exception{
+		Audio monAudio =  new Audio("MonDocumentAudio",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		Class cArg[] = new Class[1];
+		cArg[0] = Genre.class;
+		Method method = maMediatheque.getClass().getDeclaredMethod("existeDocument", cArg);
+		method.setAccessible(true);
+		Object o = method.invoke(maMediatheque,new Object[] {monGenre});
+		assertEquals(o,true);
+		
+	}
+	
+	@Test
+	public void testexisteDocument3() throws Exception{
+		Audio monAudio =  new Audio("MonDocumentAudio",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		Class cArg[] = new Class[1];
+		cArg[0] = Localisation.class;
+		Method method = maMediatheque.getClass().getDeclaredMethod("existeDocument", cArg);
+		method.setAccessible(true);
+		Object o = method.invoke(maMediatheque,new Object[] {maLocalisation});
+		assertEquals(o,true);
+		
+	}
+	
+	@Test
+	public void testexisteDocument4() throws Exception{
+		Audio monAudio =  new Audio("MonDocumentAudio",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		Class cArg[] = new Class[1];
+		cArg[0] = Localisation.class;
+		Method method = maMediatheque.getClass().getDeclaredMethod("existeDocument", cArg);
+		method.setAccessible(true);
+		Object o = method.invoke(maMediatheque,new Object[] {new Localisation("fausseSalle", "fauxRayon")});
+		assertEquals(o,false);
+		
+	}
+	
+	@Test
+	public void testgetDocumentAt() throws Exception{
+		Audio monAudio =  new Audio("MonDocument",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		Audio monAudio2 = (Audio)maMediatheque.getDocumentAt(0);
+		assertEquals(monAudio2.getCode(),"MonDocument");
+	}
+	
+	@Test
+	public void testgetDocumentAt2() throws Exception{
+		Audio monAudio =  new Audio("MonDocument",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		Audio monAudio2 = (Audio)maMediatheque.getDocumentAt(5);
+		assertEquals(monAudio2,null);
+	}
+	
+	@Test
+	public void testGetDocumentSize() throws Exception{
+		Audio monAudio =  new Audio("MonDocument",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio);
+		assertEquals(2,maMediatheque.getDocumentsSize());
+		Audio monAudio2 =  new Audio("MonDocument2",maLocalisation,"titre","auteur","annee",monGenre,"classification");
+		maMediatheque.ajouterDocument(monAudio2);
+		assertEquals(2,maMediatheque.getDocumentsSize());
+	}
+	
+	
+	@Test (expected = OperationImpossible.class)
+	public void testEmprunter() throws Exception{
+		maMediatheque.emprunter("FauxNom", "FauxPrenom", "FauxCode");
+	}
+	
+	
+	@Test (expected = OperationImpossible.class)
+	public void testEmprunter2() throws Exception{
+		maMediatheque.emprunter("Sternberger", "Aurelien", "Code");
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testEmprunter3() throws Exception{
+		maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
+		maMediatheque.emprunter("Sternberger", "Aurelien", "CodeInexistant");
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testEmprunter4() throws Exception{
+		maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
+		maMediatheque.emprunter("Sternberger", "Aurelien", "123");
+	}
+	
+	@Test //(expected = OperationImpossible.class)
+	public void testEmprunter5() throws Exception{
+		Audio musique1 = new Audio("1234",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
+		musique1.metEmpruntable();
+		musique1.emprunter();
+		System.out.println("kdkqsldjkqsldjkqlsdqlkdsjksldqjklqsdjl : ");
+		System.out.println(musique1.getGenre());
+		maMediatheque.listerGenres();
+		maMediatheque.ajouterDocument(musique1);
+		maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
+		maMediatheque.emprunter("Sternberger", "Aurelien", "1234");
+	}
+	
+	@Test 
+	public void testEmprunter6() throws Exception{
+		maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
+		maMediatheque.emprunter("Sternberger", "Aurelien", "123");
+	}
 
 }

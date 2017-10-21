@@ -275,7 +275,7 @@ public final class Mediatheque implements Serializable {
         public CategorieClient chercherCatClient(String catName) {
                 CategorieClient searched = new CategorieClient(catName);
                 int index = lesCatsClient.indexOf(searched);
-                if (index == 0) {
+                if (index >= 0) {
                         return lesCatsClient.elementAt(index);
                 } else {
                         return null;
@@ -370,6 +370,7 @@ public final class Mediatheque implements Serializable {
                         if (co.getCodeReducUtilise() != codeReducUsed) {
                                 co.modifierCodeReducActif(codeReducUsed);
                         }
+                        c=co;
                 }
                 return c;
         }

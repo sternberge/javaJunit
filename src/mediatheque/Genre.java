@@ -17,7 +17,7 @@ public class Genre implements Serializable{
         /**
          * Nombre de fois ou un document de ce genre a ete emprunte
          */
-        private int nbEmprunts=10;
+        private static int nbEmprunts=0;
 
         /**
          * Constructeur de Genre
