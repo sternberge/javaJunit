@@ -132,7 +132,7 @@ public final class Mediatheque implements Serializable {
          */
         public void modifierGenre(String old, String neuf) throws OperationImpossible {
                 Genre g = chercherGenre(old);
-                if (g != null) {
+                if (g == null) {
                         throw new OperationImpossible("Genre \""
                                         + old + "\" inexistant");
                 } else {
@@ -469,7 +469,7 @@ public final class Mediatheque implements Serializable {
                 if (doc == null){
                         throw new OperationImpossible("MetEmpruntable code inexistant:"+code);
                 }
-                doc.metConsultable();
+                doc.metEmpruntable();
         }
 
         /**

@@ -279,6 +279,7 @@ public class Client implements Serializable {
                 lesEmprunts.add(emprunt);
                 nbEmpruntsEffectues++;
                 nbEmpruntsEnCours++;
+                nbEmpruntsTotal ++;
         }
 
         /**
@@ -288,6 +289,7 @@ public class Client implements Serializable {
                 assert peutEmprunter();
                 nbEmpruntsEffectues++;
                 nbEmpruntsEnCours++;
+                nbEmpruntsTotal ++;
         }
 
         /**
