@@ -64,8 +64,6 @@ public class FicheEmprunt implements Serializable {
                 int duree = document.dureeEmprunt();
                 dateLimite = client.dateRetour(dateEmprunt, duree);
                 depasse = false;
-                //document.emprunter();
-                //client.emprunter(this);
                 client.emprunter(this);
                 document.emprunter();
                 nbEmpruntsTotal++;

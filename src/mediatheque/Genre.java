@@ -17,7 +17,7 @@ public class Genre implements Serializable{
         /**
          * Nombre de fois ou un document de ce genre a ete emprunte
          */
-        private static int nbEmprunts=0;
+        private int nbEmprunts=0;
 
         /**
          * Constructeur de Genre
@@ -33,9 +33,8 @@ public class Genre implements Serializable{
          * ce genre a ete emprunte
          */
         public void emprunter(){
-        	//nbEmprunts = nbEmprunts+2;
         	nbEmprunts = nbEmprunts+1;
-        }
+        } 
 
         /**
          * <TT>getNom</TT> permet de connaitre le nom du genre
