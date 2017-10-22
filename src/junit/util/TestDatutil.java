@@ -6,17 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import org.junit.Before;
 import org.junit.Test;
 
 import util.Datutil;
 
 public class TestDatutil {
-
-	/*@Before
-	public void setUp() throws Exception {
-	}*/
 
 	@Test
 	public void dateToStringTest() {

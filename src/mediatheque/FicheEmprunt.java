@@ -64,8 +64,10 @@ public class FicheEmprunt implements Serializable {
                 int duree = document.dureeEmprunt();
                 dateLimite = client.dateRetour(dateEmprunt, duree);
                 depasse = false;
-                document.emprunter();
+                //document.emprunter();
+                //client.emprunter(this);
                 client.emprunter(this);
+                document.emprunter();
                 nbEmpruntsTotal++;
                 System.out.println("\tTarif = " + getTarifEmprunt() + " euros");
         }
@@ -82,7 +84,7 @@ public class FicheEmprunt implements Serializable {
                 } else {
                         Date dateActuelle = Datutil.dateDuJour();
                         if (dateLimite.before(dateActuelle)) {
-                                premierRappel();
+                                this.premierRappel();
                         }
                 }
         }
@@ -168,6 +170,10 @@ public class FicheEmprunt implements Serializable {
         public double getTarifEmprunt(){ 
                 double tarifNominal = document.tarifEmprunt();
                 return  client.sommeDue(tarifNominal);
+        }
+        
+        public LettreRappel getLettreRappel() {
+        	return rappel;
         }
 
         /**

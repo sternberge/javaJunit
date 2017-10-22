@@ -192,8 +192,8 @@ public class TestMediatheque {
 	@Test
 	public void testGetCategorieAt2() throws Exception {
 		maMediatheque.ajouterCatClient("Enfant", 0, 0, 0, 0, true);
-		CategorieClient c =maMediatheque.getCategorieAt(1);
-		assertEquals(c.getNom(),"Enfant");
+		CategorieClient c = maMediatheque.getCategorieAt(2);
+		assertEquals("Enfant", c.getNom());
 	}
 	
 	@Test (expected = OperationImpossible.class)
@@ -222,7 +222,7 @@ public class TestMediatheque {
 		
 		Audio monAudio =  new Audio("MonDocument",maLocalisation,"titre","auteur","annee",monGenre,"classification");
 		maMediatheque.ajouterDocument(monAudio);
-		Audio monAudio2 = (Audio)maMediatheque.getDocumentAt(0);
+		Audio monAudio2 = (Audio)maMediatheque.getDocumentAt(1);
 		assertEquals(monAudio2.getCode(),"MonDocument");
 		assertEquals(monAudio2.getTitre(),"titre");
 	}
@@ -342,8 +342,8 @@ public class TestMediatheque {
 	public void testgetDocumentAt() throws Exception{
 		Audio monAudio =  new Audio("MonDocument",maLocalisation,"titre","auteur","annee",monGenre,"classification");
 		maMediatheque.ajouterDocument(monAudio);
-		Audio monAudio2 = (Audio)maMediatheque.getDocumentAt(0);
-		assertEquals(monAudio2.getCode(),"MonDocument");
+		Audio monAudio2 = (Audio)maMediatheque.getDocumentAt(1);
+		assertEquals("MonDocument", monAudio2.getCode());
 	}
 	
 	@Test
@@ -361,7 +361,7 @@ public class TestMediatheque {
 		assertEquals(2,maMediatheque.getDocumentsSize());
 		Audio monAudio2 =  new Audio("MonDocument2",maLocalisation,"titre","auteur","annee",monGenre,"classification");
 		maMediatheque.ajouterDocument(monAudio2);
-		assertEquals(2,maMediatheque.getDocumentsSize());
+		assertEquals(3,maMediatheque.getDocumentsSize());
 	}
 	
 	

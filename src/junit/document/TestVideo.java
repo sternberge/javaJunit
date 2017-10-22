@@ -8,7 +8,6 @@ import org.junit.Test;
 import mediatheque.Genre;
 import mediatheque.Localisation;
 import mediatheque.OperationImpossible;
-import mediatheque.document.Livre;
 import mediatheque.document.Video;
 
 public class TestVideo {

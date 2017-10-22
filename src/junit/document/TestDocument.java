@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import mediatheque.document.DocumentForTest;
-import util.InvariantBroken;
 import mediatheque.Genre;
 import mediatheque.Localisation;
 import mediatheque.OperationImpossible;
