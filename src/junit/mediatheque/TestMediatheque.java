@@ -2,6 +2,8 @@ package junit.mediatheque;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 
 import mediatheque.*;
@@ -9,10 +11,12 @@ import mediatheque.client.CategorieClient;
 import mediatheque.client.Client;
 import mediatheque.document.Audio;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestMediatheque {
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
 	Mediatheque maMediatheque;
 	Localisation maLocalisation;
@@ -22,6 +26,7 @@ public class TestMediatheque {
 	
 	@Before
 	public void setUp() throws Exception {
+		 System.setOut(new PrintStream(outContent));
 		maMediatheque = new Mediatheque("Mediatheque");
 		maMediatheque.ajouterCatClient("Etudiant", 0, 0, 0, 0, true);
 		maMediatheque.ajouterCatClient("Retraite", 0, 0, 0, 0, true);
@@ -32,6 +37,12 @@ public class TestMediatheque {
 		Audio musique = new Audio("123",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
 		maMediatheque.ajouterDocument(musique);
 		maMediatheque.inscrire("Sternberger", "Aurelien", "adresse", "Etudiant");
+	}
+	
+	@After
+	public void cleanUpStreams() {
+	    System.setOut(null);
+	   
 	}
 
 	
@@ -388,14 +399,11 @@ public class TestMediatheque {
 		maMediatheque.emprunter("Sternberger", "Aurelien", "123");
 	}
 	
-	@Test //(expected = OperationImpossible.class)
+	@Test (expected = OperationImpossible.class)
 	public void testEmprunter5() throws Exception{
 		Audio musique1 = new Audio("1234",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
 		musique1.metEmpruntable();
 		musique1.emprunter();
-		System.out.println("kdkqsldjkqsldjkqlsdqlkdsjksldqjklqsdjl : ");
-		System.out.println(musique1.getGenre());
-		maMediatheque.listerGenres();
 		maMediatheque.ajouterDocument(musique1);
 		maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
 		maMediatheque.emprunter("Sternberger", "Aurelien", "1234");
@@ -404,7 +412,135 @@ public class TestMediatheque {
 	@Test 
 	public void testEmprunter6() throws Exception{
 		maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
-		maMediatheque.emprunter("Sternberger", "Aurelien", "123");
+		Audio musique1 = new Audio("1234",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
+		musique1.metEmpruntable();
+		maMediatheque.ajouterDocument(musique1);
+		maMediatheque.emprunter("Sternberger", "Aurelien", "1234");
+		assertEquals("1234",maMediatheque.getFicheEmpruntAt(0).getDocument().getCode());
+		assertEquals("Sternberger",maMediatheque.getFicheEmpruntAt(0).getClient().getNom());
+	}
+	
+	@Test(expected = OperationImpossible.class)
+	public void testRestituer() throws Exception{
+		maMediatheque.restituer("nomInconnu", "prenomInconnu", "123");
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testRestituer2() throws Exception {
+		maMediatheque.restituer("Sternberger", "Aurelien", "FauxCode");
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testRestituer3() throws Exception {
+		maMediatheque.restituer("Sternberger", "Aurelien", "123");
+	}
+	
+	@Test 
+	public void testRestituer4() throws Exception {
+		maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
+		Audio musique1 = new Audio("1234",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
+		musique1.metEmpruntable();
+		maMediatheque.ajouterDocument(musique1);
+		maMediatheque.emprunter("Sternberger", "Aurelien", "1234");
+		assertEquals("1234",maMediatheque.getFicheEmpruntAt(0).getDocument().getCode());
+		assertEquals("Sternberger",maMediatheque.getFicheEmpruntAt(0).getClient().getNom());
+		maMediatheque.restituer("Sternberger", "Aurelien", "1234");
+		
+		assertEquals(0,maMediatheque.getFicheEmpruntsSize());
+		
+	}
+	
+	@Test
+	public void testverifier() throws Exception {
+		maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
+		Audio musique1 = new Audio("1234",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
+		musique1.metEmpruntable();
+		maMediatheque.ajouterDocument(musique1);
+		maMediatheque.emprunter("Sternberger", "Aurelien", "1234");
+		maMediatheque.verifier();
+	}
+	
+	
+	/// A voir
+	@Test
+	public void testverifier2() throws Exception {
+		maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
+		Audio musique1 = new Audio("1234",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
+		musique1.metEmpruntable();
+		maMediatheque.ajouterDocument(musique1);
+		maMediatheque.emprunter("Sternberger", "Aurelien", "1234");
+		Class cArg[] = null;
+		Method method = maMediatheque.getFicheEmpruntAt(0).getClass().getDeclaredMethod("premierRappel", cArg);
+		method.setAccessible(true);
+		Object o = method.invoke(maMediatheque.getFicheEmpruntAt(0),new Object[] {});
+
+		maMediatheque.verifier();
+	}
+	
+	
+	// atester
+	@Test
+	public void testListerFicheEmprunts() {
+		maMediatheque.listerFicheEmprunts();
+		
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testInscrire () throws Exception {
+		maMediatheque.inscrire("Nom", "Prenom", "adresse", "categorieInexistante");
+	}
+	
+	
+	@Test
+	public void testInscrire2 () throws Exception {
+		maMediatheque.inscrire("Nom", "Prenom", "adresse", "Etudiant");
+		assertEquals(2,maMediatheque.getClientsSize());
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testInscrire3 () throws Exception {
+		maMediatheque.inscrire("Nom", "Prenom", "adresse", "categorieInexistante",2);
+	}
+	
+	@Test
+	public void testInscrire4 () throws Exception {
+		maMediatheque.inscrire("Nom", "Prenom", "adresse", "Etudiant",2);
+		assertEquals(2,maMediatheque.getClientsSize());
+	}
+	
+	
+	// A faire pour la methode private !
+	/*@Test
+	public void testInscrire5 () throws Exception {
+		CategorieClient maCat = new CategorieClient("Etudiant");
+		maMediatheque.inscrire("Nom", "Prenom", "adresse", maCat ,2);
+		assertEquals(2,maMediatheque.getClientsSize());
+	}*/
+	
+	@Test (expected = OperationImpossible.class)
+	public void testResilier () throws Exception {
+		maMediatheque.resilier("FauxNom", "FauxPrenom");
+	}
+	
+	@Test  (expected = OperationImpossible.class)
+	public void testResilier2 () throws Exception {
+	maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
+	Audio musique1 = new Audio("1234",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
+	musique1.metEmpruntable();
+	maMediatheque.ajouterDocument(musique1);
+	maMediatheque.emprunter("Sternberger", "Aurelien", "1234");
+	maMediatheque.resilier("Sternberger", "Aurelien");
+	}
+	
+	@Test
+	public void testResilier3 () throws Exception {
+		maMediatheque.resilier("Sternberger", "Aurelien");
+		assertEquals(0,maMediatheque.getClientsSize());
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testModifierCLient() throws Exception {
+		maMediatheque.modifierClient(new Client ("FauxNom","fauxPrenom"), "nom", "prenom", "adresse", "catnom", 0);
 	}
 
 }
