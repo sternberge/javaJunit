@@ -69,7 +69,8 @@ public class TestMediatheque {
 		maMediatheque.ajouterGenre("Fiction");
 		Genre genreSearch = maMediatheque.chercherGenre("Fiction");
 		assertEquals(genreSearch.getNom(),"Fiction");
-		maMediatheque.supprimerGenre("Fiction"); // Le print ne fonctionne pas
+		maMediatheque.supprimerGenre("Fiction");
+		assertTrue(maMediatheque.chercherGenre("Fiction")==null);
 
 	}
 	
@@ -269,15 +270,6 @@ public class TestMediatheque {
 		maMediatheque.metEmpruntable("CodeInexistant");
 	}
 	
-	@Test 
-	public void testmetEmpruntable2() throws Exception {
-		Audio monAudio =  new Audio("MonDocumentAudio",maLocalisation,"titre","auteur","annee",monGenre,"classification");
-		monAudio.metEmpruntable();
-		assertTrue(monAudio.estEmpruntable());
-		assertTrue(monAudio.emprunter());
-		
-		
-	}
 	
 	
 	
@@ -524,12 +516,10 @@ public class TestMediatheque {
 	
 	@Test  (expected = OperationImpossible.class)
 	public void testResilier2 () throws Exception {
-	maMediatheque.getClientAt(0).getCategorie().modifierMax(20);
-	Audio musique1 = new Audio("1234",maLocalisation,"Titre","auteur","annee",monGenre,"Classification");
-	musique1.metEmpruntable();
-	maMediatheque.ajouterDocument(musique1);
-	maMediatheque.emprunter("Sternberger", "Aurelien", "1234");
-	maMediatheque.resilier("Sternberger", "Aurelien");
+		maMediatheque.ajouterCatClient("nomcat", 1, 0, 0, 0, false);
+		maMediatheque.inscrire("Sternberger", "Aurelien", "adresse", "nomcat");
+		maMediatheque.resilier("Sternberger", "Aurelien");
+		assertNull(maMediatheque.chercherClient("Sternberger", "Aurelien"));
 	}
 	
 	@Test
@@ -542,5 +532,45 @@ public class TestMediatheque {
 	public void testModifierCLient() throws Exception {
 		maMediatheque.modifierClient(new Client ("FauxNom","fauxPrenom"), "nom", "prenom", "adresse", "catnom", 0);
 	}
+	
+	
+	@Test
+	public void testListerClients () throws Exception {
+		maMediatheque.resilier("Sternberger", "Aurelien");
+		maMediatheque.listerClients();
+	}
+	
+	@Test (expected = OperationImpossible.class)
+	public void testChangerCodeReduction () throws Exception {
+		maMediatheque.changerCodeReduction("nom", "prenom", 123);
+	}
+	
+	@Test
+	public void testEmpty() {
+		maMediatheque.empty();
+        assertTrue(maMediatheque.getGenresSize()==0);
+        assertTrue(maMediatheque.getLocalisationsSize()==0);
+        assertTrue(maMediatheque.getClientsSize()==0);
+        assertTrue(maMediatheque.getDocumentsSize()==0);
+        assertTrue(maMediatheque.getCategoriesSize()==0);
+        assertTrue(maMediatheque.getFicheEmpruntsSize()==0);
+	}
+	
+	
+	@Test
+	public void testChercherClient() throws OperationImpossible {
+		maMediatheque.ajouterCatClient("nomCat", 1, 1, 1, 1, false);
+		maMediatheque.inscrire("Chachoua", "Aurelien", "adresse", "nomCat");
+		assertNotNull(maMediatheque.chercherClient("Chachoua", "Aurelien"));	
+		}
+	
+	@Test
+	public void testExisteClient() throws OperationImpossible {
+		maMediatheque.ajouterCatClient("nomCat", 1, 1, 1, 1, false);
+		maMediatheque.inscrire("Chachoua", "Aurelien", "adresse", "nomCat");
+		assertTrue(maMediatheque.existeClient(maMediatheque.chercherCatClient("nomCat")));	
+		}
+	
+	
 
 }
